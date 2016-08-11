@@ -1,13 +1,13 @@
 %% Demo demonstrating CPR code using toy data.
 
 %% generate toy training and testing data
-RandStream.getGlobalStream.reset(); n0=100; n1=100; n2=0;
+RandStream.getGlobalStream.reset(); n0=50; n1=50; n2=0;
 model=poseGt('createModel','ellipse'); d=100;
 model.parts(1).sigs(1:3)=[10 10 pi];
 [Is,p] = poseGt('toyData',model,n0+n1+n2,d,d,'noise',.2);
 % Load ears
-data = load('ears.mat');
-Is = data.Is;
+data = load('test_ears.mat');
+Is = data.result;
 % Load annotations
 annotation = load('ears_annotated.mat');
 p = annotation.result;
@@ -16,9 +16,19 @@ save('toyLizard-data','Is','model','p','n0','n1','n2');
 
 %% load data and split into training and testing data
 name='toyLizard'; d=load([name '-data']); name=[name '00'];
-Is=d.Is; model=d.model; p=d.p; n0=d.n0; n1=d.n1; n2=d.n2; clear d;
-if(n1==0), n1=n2; end; p0=p(1:n0,:); p1=p(n0+(1:n1),:);
-Is=permute(Is,[1 2 4 3]); Is0=Is(:,:,:,1:n0); Is1=Is(:,:,:,n0+(1:n1));
+Is=d.Is; 
+model=d.model; 
+p=d.p; 
+n0=d.n0; 
+n1=d.n1; 
+n2=d.n2; 
+clear d;
+if(n1==0), n1=n2; end; 
+p0=p(1:n0,:); 
+p1=p(n0+(1:n1),:);
+Is=permute(Is,[1 2 4 3]); 
+Is0=Is(:,:,:,1:n0); 
+Is1=Is(:,:,:,n0+(1:n1));
 clear Is p n2;
 
 %% train or load regressor
