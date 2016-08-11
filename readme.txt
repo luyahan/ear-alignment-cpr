@@ -36,7 +36,11 @@ Make sure the random ferns code in the toolbox is working (see and run the examp
 
 4. Getting Started.
 
-The code is quite compact, as is the method. Start with cprDemo.m which first generates toy data, then trains a CPR model, and finally displays the error and example results. The demo should take under 5 minutes to run, including training time. To run CPR with your own data start with cprDemo.m but replace the toy data with real data (using the same format). You may also want to update poseGt.m to define a new pose model (models in poseGt are provided for fish, mouse, and face data) and poseLabeler to label ground truth pose.
+The code is quite compact, as is the method. Start with cprDemo.m which first generates toy data, then trains a CPR model, 
+and finally displays the error and example results. The demo should take under 5 minutes to run, including training time. 
+To run CPR with your own data start with cprDemo.m but replace the toy data with real data (using the same format). You may 
+also want to update poseGt.m to define a new pose model (models in poseGt are provided for fish, mouse, and face data) and 
+poseLabeler to label ground truth pose.
 
 ###################################################################
 

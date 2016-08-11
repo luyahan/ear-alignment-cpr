@@ -5,8 +5,12 @@ RandStream.getGlobalStream.reset(); n0=100; n1=100; n2=0;
 model=poseGt('createModel','ellipse'); d=100;
 model.parts(1).sigs(1:3)=[10 10 pi];
 [Is,p] = poseGt('toyData',model,n0+n1+n2,d,d,'noise',.2);
-% data = load('ears.mat');
-% Is = data.Is;
+% Load ears
+data = load('ears.mat');
+Is = data.Is;
+% Load annotations
+annotation = load('ears_annotated.mat');
+p = annotation.result;
 figure(1); poseGt('draw',model,Is,p);
 save('toyLizard-data','Is','model','p','n0','n1','n2');
 
