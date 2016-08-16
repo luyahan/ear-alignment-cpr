@@ -32,6 +32,9 @@ for i = 3:numfids
   %iterate over all files in dir
   for j = 3:size(dir_content,1)
       % construct path+name for saving
+      if(strcmp(dir_content(j).name,'.DS_Store'))
+          continue;
+      end
       Im = imread([file_name,dir_content(j).name]);
       path = [result_dir,int2str(index),'.png'];
       imwrite(Im, path);
