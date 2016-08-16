@@ -1,21 +1,21 @@
 %% Demo demonstrating CPR code using toy data.
 
 %% generate toy training and testing data
-RandStream.getGlobalStream.reset(); n0=50; n1=50; n2=0;
+RandStream.getGlobalStream.reset(); n0=127; n1=127; n2=0;
 model=poseGt('createModel','ellipse'); d=100;
 model.parts(1).sigs(1:3)=[10 10 pi];
 % [Is,p] = poseGt('toyData',model,n0+n1+n2,d,d,'noise',.2);
 % Load ears
-data = load('test_ears.mat');
+data = load('set254_orig_images.mat');
 Is = data.result;
 % Load annotations
-annotation = load('ears_annotated.mat');
+annotation = load('set254_orig_annotations.mat');
 p = annotation.result;
 figure(1); poseGt('draw',model,Is,p);
-save('toyLizard-data','Is','model','p','n0','n1','n2');
+save('set254-data','Is','model','p','n0','n1','n2');
 
 %% load data and split into training and testing data
-name='toyLizard'; d=load([name '-data']); name=[name '00'];
+name='set254'; d=load([name '-data']); name=[name '00'];
 Is=d.Is; 
 model=d.model; 
 p=d.p; 

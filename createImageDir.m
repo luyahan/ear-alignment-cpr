@@ -37,6 +37,9 @@ for i = 3:numfids
       end
       Im = imread([file_name,dir_content(j).name]);
       path = [result_dir,int2str(index),'.png'];
+      if size(Im, 3) > 1
+        Im = rgb2gray(Im);
+      end
       imwrite(Im, path);
       index = index + 1;
   end
