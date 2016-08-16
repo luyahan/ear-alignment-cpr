@@ -1,12 +1,12 @@
 %% Demo demonstrating CPR code using toy data.
 
 %% generate toy training and testing data
-RandStream.getGlobalStream.reset(); n0=127; n1=127; n2=0;
+RandStream.getGlobalStream.reset(); n0=53; n1=52; n2=0;
 model=poseGt('createModel','ellipse'); d=100;
 model.parts(1).sigs(1:3)=[10 10 pi];
 % [Is,p] = poseGt('toyData',model,n0+n1+n2,d,d,'noise',.2);
 % Load ears
-data = load('set254_orig_images.mat');
+data = load('set105_orig_images.mat');
 Is = data.result;
 % Load annotations
 annotation = load('set254_orig_annotations.mat');
@@ -32,7 +32,7 @@ Is1=Is(:,:,:,n0+(1:n1));
 clear Is p n2;
 
 %% train or load regressor
-if( 1 ) % train regressor
+if( 0 ) % train regressor
   RandStream.getGlobalStream.reset(); L=ceil(4000/n0);
   if( 1 ), F=64; R=32; T=512; else F=128; R=1024; T=512; end
   ftrPrm = struct('type',2,'F',F,'radius',1.66);
@@ -65,7 +65,8 @@ if(0), savefig([name '-T-plot'],'jpeg'); end
 % fail=squeeze(mean(ds1>f^2)); figure(2); semilogx(fail,'--r');
 
 %% display some results
-figure(2); poseGt('drawRes',model,Is1,p1,pa1(:,:,end),'nCol',10);
+figure(5); poseGt('drawRes',model,Is1,p1,pa1(:,:,end),'nCol',10);
+figure(6); poseGt('drawRes',model,Is0,p0,pa0(:,:,end),'nCol',10);
 if(0), savefig([name '-examples'],'jpeg'); end
 
 %% test cprApply with clustering
@@ -79,4 +80,4 @@ d=sqrt(ds2e); fprintf('reg-loss mu=%f, f=%f\n',mean(d(d<f)),mean(d>f));
 d=sqrt(ds2ke); fprintf('clust-loss  mu=%f, f=%f\n',mean(d(d<f)),mean(d>f));
 figure(2); poseGt('drawRes',model,Is2,p2,pa2(:,:,end),'nCol',10);
 figure(3); poseGt('drawRes',model,Is2,p2,pa2k(:,:,end),'nCol',10);
-if(0), savefig([name '-examplesK'],'jpeg'); end
+% if(0), savefig([name '-examplesK'],'jpeg'); end

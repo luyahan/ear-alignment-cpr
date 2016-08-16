@@ -1,6 +1,6 @@
 %% Reads images and saves them to .mat format
 
-dir_name = 'piotr-cpr/set254_orig/';
+dir_name = 'piotr-cpr/set105_orig/';
 fnames = dir([dir_name, '*.png']);
 numfids = length(fnames);
 % numfids = numfids - 2;
@@ -13,7 +13,8 @@ for i = 1:numfids
   file_name = [dir_name, file_name];
 %   file_name = [image_dir,fnames(i).name];
   Im = imread(file_name);
+  Im = imresize(Im, [100 100]);
   result(:,:,i) = Im;
   fclose('all');
 end
-save('set254_orig_images.mat', 'result')
+save('set105_orig_images.mat', 'result')

@@ -233,34 +233,56 @@ set(h,'LineWidth',lw); hold off; h=h(:);
 end
 
 function [h,Vs] = drawRes( model, Is, phisGt, phis, varargin )
-% Draw results overlaid on ground truth, separated into quantiles.
-dfs={ 'quantile',5, 'nCol',6, 'lw',1, 'clrTr',0, 'ignGt',0, 'drawIs',1 };
-[qnt,nCol,lw,clrTr,ignGt,drawIs]=getPrmDflt(varargin,dfs,1);
-if(isempty(phisGt)), phisGt=phis(:,:,1); end
-n=size(phis,1); T=size(phis,3); assert(size(phisGt,1)==n);
-% sort by quality of results
-ds=dist(model,phis,phisGt); [ds,ord]=sort(ds(:,1,end));
-phisGt=phisGt(ord,:); phis=phis(ord,:,:);
-% divide into quantiles
-if(ndims(Is)==2), nShow=n; is=1:n; else Is=Is(:,:,ord);
-  if(length(qnt)==1), qnt=round(linspace(0,n,qnt+1)); end
-  q=length(qnt)-1; nCol=min(nCol,n); is=zeros(nCol,q); nShow=[q nCol];
-  for i=1:q, is(:,i)=sort(randSample(qnt(i)+1:qnt(i+1),nCol,1)); end
-end
-% draw ground truth and results
-if(clrTr), clrs=hsv(round(T*6)); clrs=clrs(round(T*.8):end,:);
-else clrs=repmat([0 1 0],[T 1]); end;
-h1=draw(model,Is,phisGt,'clrs',[0 .8 .8],'n',nShow,'is',is,'lw',lw,...
-  'drawIs',drawIs); if(ignGt), delete(h1); h1=[]; end
-for t=1:T
-  h2=draw(model,Is,phis(:,:,t),'clrs',clrs(t,:),'drawIs',0,...
-    'n',nShow,'is',is,'lw',lw); if(t==T), drawnow; break; end
-  title(t); drawnow; if(nargout<2), delete(h2); continue; end
-  if(t==1), pos=get(gca,'position'); else set(gca,'position',pos); end
-  V=getframe(gca); V=V.cdata; if(t==1), Vs=zeros([size(V) T],'uint8'); end
-  Vs(:,:,:,t)=V; delete(h2);
-end; h=[h1(:) h2(:)];
-if(nargout==2), V=getframe(gca); Vs(:,:,:,T)=V.cdata; end
+    % Draw results overlaid on ground truth, separated into quantiles.
+    dfs={ 'quantile',5, 'nCol',6, 'lw',1, 'clrTr',0, 'ignGt',0, 'drawIs',1 };
+    [qnt,nCol,lw,clrTr,ignGt,drawIs]=getPrmDflt(varargin,dfs,1);
+    if(isempty(phisGt)), phisGt=phis(:,:,1); end
+    n=size(phis,1); T=size(phis,3); assert(size(phisGt,1)==n);
+    % sort by quality of results
+    ds=dist(model,phis,phisGt); [ds,ord]=sort(ds(:,1,end));
+    phisGt=phisGt(ord,:); phis=phis(ord,:,:);
+    % divide into quantiles
+    if(ndims(Is)==2), nShow=n; is=1:n; else Is=Is(:,:,ord);
+      if(length(qnt)==1), qnt=round(linspace(0,n,qnt+1)); end
+      q=length(qnt)-1; nCol=min(nCol,n); is=zeros(nCol,q); nShow=[q nCol];
+      for i=1:q, is(:,i)=sort(randSample(qnt(i)+1:qnt(i+1),nCol,1)); end
+    end
+    
+    % draw ground truth and results
+    if(clrTr), clrs=hsv(round(T*6)); clrs=clrs(round(T*.8):end,:);
+    else clrs=repmat([0 1 0],[T 1]); end;
+    h1=draw(model,Is,phisGt,'clrs',[0 .8 .8],'n',nShow,'is',is,'lw',lw,...
+      'drawIs',drawIs); if(ignGt), delete(h1); h1=[]; end
+    for t=1:T
+      h2=draw(model,Is,phis(:,:,t),'clrs',clrs(t,:),'drawIs',0,...
+        'n',nShow,'is',is,'lw',lw); 
+      if(t==T)
+          drawnow; 
+          break; 
+      end
+      title(t); drawnow; 
+      if(nargout<2) 
+          delete(h2); 
+          continue; 
+      end
+      if(t==1)
+          pos=get(gca,'position'); 
+      else
+          set(gca,'position',pos);
+      end
+      V=getframe(gca); 
+      V=V.cdata; 
+      if(t==1)
+          Vs=zeros([size(V) T],'uint8'); 
+      end
+      Vs(:,:,:,t)=V; 
+      delete(h2);
+    end; 
+    h=[h1(:) h2(:)];
+    if(nargout==2)
+        V=getframe(gca); 
+        Vs(:,:,:,T)=V.cdata; 
+    end
 end
 
 function [Is,phis] = toyData( model, n, h, w, varargin )
