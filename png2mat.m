@@ -1,11 +1,11 @@
 %% Reads images and saves them to .mat format
 
-dir_name = 'piotr-cpr/set358_ucna/';
+dir_name = 'piotr-cpr/set520/';
 fnames = dir([dir_name, '*.png']);
 numfids = length(fnames);
 % numfids = numfids - 2;
-image_dir = 'piotr-cpr/set358_orig/';
-result = zeros(100, 100, 90);
+% image_dir = 'piotr-cpr/set358_orig/';
+result = zeros(100, 100, 520);
 
 for i = 1:numfids
   file_name_index = size(fnames(i).name,2);
@@ -16,4 +16,4 @@ for i = 1:numfids
   result(:,:,i) = Im;
   fclose('all');
 end
-save('set358_ucna_images.mat', 'result')
+save('set520_orig_images.mat', 'result')

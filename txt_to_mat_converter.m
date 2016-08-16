@@ -1,4 +1,4 @@
-dir_name = 'piotr-cpr/anontations1/';
+dir_name = 'piotr-cpr/set358_ucna_annotated/';
 fnames = dir([dir_name, '*.txt']);
 numfids = length(fnames);
 % numfids = numfids - 2;
@@ -14,4 +14,4 @@ for i = 1:numfids
   end
   fclose('all');
 end
-save('ears_annotated.mat', 'result')
+save('set358_ucna_annotations.mat', 'result')
