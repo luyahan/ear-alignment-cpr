@@ -9,7 +9,7 @@ function peskovnik()
     for i=1:100
         
         % create path for reading dir        
-        path = 'diploma/databases/awe/';
+        path = 'databases/awe/';
         prefix = '';
         
         % make prefix for reading database (001, 002, ...)
@@ -63,7 +63,7 @@ function peskovnik()
                 continue;
             end
             
-         if current_data.hYaw < 2
+%          if current_data.hRoll < 2 && current_data.hRoll > - 2&& current_data.hYaw < 2
             index = index +1;
             disp(image_path);
             I = imread(image_path);
@@ -72,9 +72,9 @@ function peskovnik()
             if size(I, 3) > 1
                 I = rgb2gray(I);
             end
-            imwrite(I, ['ugodneSlike_yaw01/', int2str(index), '.png']);
+%             imwrite(I, ['set520/', int2str(index), '.png']);
 %             Is(:,:,i+j) = I;
-        end
+%         end
         end
     end
     disp(index);
