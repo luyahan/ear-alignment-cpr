@@ -70,14 +70,14 @@ figure(6); poseGt('drawRes',model,Is0,p0,pa0(:,:,end),'nCol',10);
 if(0), savefig([name '-examples'],'jpeg'); end
 
 %% test cprApply with clustering
-RandStream.getGlobalStream.reset();
-n2=min(128,n1); Is2=Is1(:,:,:,1:n2); p2=p1(1:n2,:);
-tic; [d2,pa2] = cprApply(Is2,regModel); toc;
-tic; [dK,pa2k] = cprApply(Is2,regModel,'K',16,'chunk',128); toc;
-ds2=poseGt('dist',regModel.model,pa2,p2); ds2e=ds2(:,:,end);
-ds2k=poseGt('dist',regModel.model,pa2k,p2); ds2ke=ds2k(:,:,end);
-d=sqrt(ds2e); fprintf('reg-loss mu=%f, f=%f\n',mean(d(d<f)),mean(d>f));
-d=sqrt(ds2ke); fprintf('clust-loss  mu=%f, f=%f\n',mean(d(d<f)),mean(d>f));
-figure(2); poseGt('drawRes',model,Is2,p2,pa2(:,:,end),'nCol',10);
-figure(3); poseGt('drawRes',model,Is2,p2,pa2k(:,:,end),'nCol',10);
+% RandStream.getGlobalStream.reset();
+% n2=min(128,n1); Is2=Is1(:,:,:,1:n2); p2=p1(1:n2,:);
+% tic; [d2,pa2] = cprApply(Is2,regModel); toc;
+% tic; [dK,pa2k] = cprApply(Is2,regModel,'K',16,'chunk',128); toc;
+% ds2=poseGt('dist',regModel.model,pa2,p2); ds2e=ds2(:,:,end);
+% ds2k=poseGt('dist',regModel.model,pa2k,p2); ds2ke=ds2k(:,:,end);
+% d=sqrt(ds2e); fprintf('reg-loss mu=%f, f=%f\n',mean(d(d<f)),mean(d>f));
+% d=sqrt(ds2ke); fprintf('clust-loss  mu=%f, f=%f\n',mean(d(d<f)),mean(d>f));
+% figure(2); poseGt('drawRes',model,Is2,p2,pa2(:,:,end),'nCol',10);
+% figure(3); poseGt('drawRes',model,Is2,p2,pa2k(:,:,end),'nCol',10);
 % if(0), savefig([name '-examplesK'],'jpeg'); end

@@ -251,6 +251,13 @@ function [h,Vs] = drawRes( model, Is, phisGt, phis, varargin )
     % draw ground truth and results
     if(clrTr), clrs=hsv(round(T*6)); clrs=clrs(round(T*.8):end,:);
     else clrs=repmat([0 1 0],[T 1]); end;
+    
+    %TODO rotation (57.2957795)    
+%     Is = uint8(Is);
+%     for k = 1:size(Is,3)
+%         Is(:,:,k) = imresize(imrotate(Is(:,:,k), phisGt(k,5)*(-57.2957795)), [100 100]);
+%     end
+    
     h1=draw(model,Is,phisGt,'clrs',[0 .8 .8],'n',nShow,'is',is,'lw',lw,...
       'drawIs',drawIs); if(ignGt), delete(h1); h1=[]; end
     for t=1:T
