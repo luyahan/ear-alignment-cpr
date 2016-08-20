@@ -6,7 +6,7 @@ model=poseGt('createModel','ellipse'); d=100;
 model.parts(1).sigs(1:3)=[10 10 pi];
 % [Is,p] = poseGt('toyData',model,n0+n1+n2,d,d,'noise',.2);
 % Load ears
-data = load('set105_orig_images.mat');
+data = load('set105_orig_images_TEST.mat');
 Is = data.result;
 % Load annotations
 annotation = load('set254_orig_annotations.mat');
@@ -65,8 +65,51 @@ if(0), savefig([name '-T-plot'],'jpeg'); end
 % fail=squeeze(mean(ds1>f^2)); figure(2); semilogx(fail,'--r');
 
 %% display some results
-figure(5); poseGt('drawRes',model,Is1,p1,pa1(:,:,end),'nCol',10);
-figure(6); poseGt('drawRes',model,Is0,p0,pa0(:,:,end),'nCol',10);
+map = load('set105_map_matrix_TEST');
+map = map.map;
+index=1;
+Is0 = uint8(Is0);
+for k = 1:size(Is0,4)
+%     figure(9);
+    %TODO SEGMENTATION
+    %rotation
+    test = imresize(imrotate(Is0(:,:,k), p0(k,5)*(-57.2957795)), [100 100]);
+%     imshow(test);
+%     imwrite(test, ['TEST_aligned/',int2str(k),'.png'])
+
+    % check if dir exist
+    folderName = map{index};
+    folderName = folderName(1:3);
+    if ~exist(['TEST_aligned/',folderName], 'dir')
+        % Folder does not exist so create it.
+        mkdir(['TEST_aligned/',folderName]);
+    end
+    imwrite(test, ['TEST_aligned/',map{index}])
+    index = index + 1;
+end
+
+Is1 = uint8(Is1);
+for k = 1:size(Is1,4)
+%     figure(9);
+    %TODO SEGMENTATION
+    %rotation
+    test = imresize(imrotate(Is1(:,:,k), p1(k,5)*(-57.2957795)), [100 100]);
+%     imshow(test);
+%     imwrite(test, ['TEST_aligned/',int2str(k+53),'.png'])
+    folderName = map{index};
+    folderName = folderName(1:3);
+    if ~exist(['TEST_aligned/',folderName], 'dir')
+        % Folder does not exist so create it.
+        mkdir(['TEST_aligned/',folderName]);
+    end
+    imwrite(test, ['TEST_aligned/',map{index}])
+    index = index + 1;
+end
+
+
+
+% figure(5); poseGt('drawRes',model,Is1,p1,pa1(:,:,end),'nCol',10);
+% figure(6); poseGt('drawRes',model,Is0,p0,pa0(:,:,end),'nCol',10);
 if(0), savefig([name '-examples'],'jpeg'); end
 
 %% test cprApply with clustering
