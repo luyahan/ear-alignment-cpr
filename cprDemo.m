@@ -11,7 +11,7 @@ Is = data.result;
 % Load annotations
 annotation = load('set254_orig_annotations.mat');
 p = annotation.result;
-figure(1); poseGt('draw',model,Is,p);
+% figure(1); poseGt('draw',model,Is,p);
 save('set254-data','Is','model','p','n0','n1','n2');
 
 %% load data and split into training and testing data
@@ -50,68 +50,95 @@ end
 tic, [d,pa1] = cprApply( Is1, regModel ); toc
 
 %% display training/testing error as function of T
-lks=[model.parts.lks]; m=length(model.parts); f=2.5;
-nms=['dx','dy',repmat({'angle','scale','aspr'},1,m)];
-[ds0,dsa0]=poseGt('dist',model,pa0,p0); dsa0=dsa0(:,lks==0,:);
-[ds1,dsa1]=poseGt('dist',model,pa1,p1); dsa1=dsa1(:,lks==0,:);
-ds0m=squeeze(median(ds0)); dsa0m=squeeze(median(dsa0))'; dse0=ds0(:,end);
-ds1m=squeeze(median(ds1)); dsa1m=squeeze(median(dsa1))'; dse1=ds1(:,end);
-d=sqrt(dse0); fprintf('train-loss mu=%f, f=%f\n',mean(d(d<f)),mean(d>f));
-d=sqrt(dse1); fprintf('test-loss  mu=%f, f=%f\n',mean(d(d<f)),mean(d>f));
-figure(1); clf; h1=loglog(dsa1m,'-'); hold on; loglog(dsa0m,':');
-loglog(ds0m,':k','LineWidth',3); loglog(ds1m,'-k','LineWidth',3);
-legend(h1,nms(lks==0)); set(h1,'LineWidth',1); axis tight
-if(0), savefig([name '-T-plot'],'jpeg'); end
+% lks=[model.parts.lks]; m=length(model.parts); f=2.5;
+% nms=['dx','dy',repmat({'angle','scale','aspr'},1,m)];
+% [ds0,dsa0]=poseGt('dist',model,pa0,p0); dsa0=dsa0(:,lks==0,:);
+% [ds1,dsa1]=poseGt('dist',model,pa1,p1); dsa1=dsa1(:,lks==0,:);
+% ds0m=squeeze(median(ds0)); dsa0m=squeeze(median(dsa0))'; dse0=ds0(:,end);
+% ds1m=squeeze(median(ds1)); dsa1m=squeeze(median(dsa1))'; dse1=ds1(:,end);
+% d=sqrt(dse0); fprintf('train-loss mu=%f, f=%f\n',mean(d(d<f)),mean(d>f));
+% d=sqrt(dse1); fprintf('test-loss  mu=%f, f=%f\n',mean(d(d<f)),mean(d>f));
+% figure(1); clf; h1=loglog(dsa1m,'-'); hold on; loglog(dsa0m,':');
+% loglog(ds0m,':k','LineWidth',3); loglog(ds1m,'-k','LineWidth',3);
+% legend(h1,nms(lks==0)); set(h1,'LineWidth',1); axis tight
+% if(0), savefig([name '-T-plot'],'jpeg'); end
 % fail=squeeze(mean(ds1>f^2)); figure(2); semilogx(fail,'--r');
 
 %% display some results
+% figure(5); poseGt('drawRes',model,Is1,p1,pa1(:,:,end),'nCol',10);
+% figure(6); poseGt('drawRes',model,Is0,p0,pa0(:,:,end),'nCol',10);
+% if(0), savefig([name '-examples'],'jpeg'); end
+
+%% save images
+
 map = load('set105_map_matrix_TEST');
 map = map.map;
 index=1;
 Is0 = uint8(Is0);
-for k = 1:size(Is0,4)
-%     figure(9);
-    %TODO SEGMENTATION
-    %rotation
-    test = imresize(imrotate(Is0(:,:,k), p0(k,5)*(-57.2957795)), [100 100]);
-%     imshow(test);
-%     imwrite(test, ['TEST_aligned/',int2str(k),'.png'])
-
-    % check if dir exist
-    folderName = map{index};
-    folderName = folderName(1:3);
-    if ~exist(['TEST_aligned/',folderName], 'dir')
-        % Folder does not exist so create it.
-        mkdir(['TEST_aligned/',folderName]);
-    end
-    imwrite(test, ['TEST_aligned/',map{index}])
-    index = index + 1;
-end
+% for k = 1:size(Is0,4)
+% %     figure(9);
+%     %TODO SEGMENTATION
+%     %rotation
+%     test = imresize(imrotate(Is0(:,:,k), p0(k,5)*(-57.2957795)), [100 100]);
+% %     imshow(test);
+% %     imwrite(test, ['TEST_aligned/',int2str(k),'.png'])
+% 
+%     % check if dir exist
+%     folderName = map{index};
+%     folderName = folderName(1:3);
+%     if ~exist(['TEST_aligned/',folderName], 'dir')
+%         % Folder does not exist so create it.
+%         mkdir(['TEST_aligned/',folderName]);
+%     end
+%     imwrite(test, ['TEST_aligned/',map{index}])
+%     index = index + 1;
+% end
 
 Is1 = uint8(Is1);
-for k = 1:size(Is1,4)
-%     figure(9);
-    %TODO SEGMENTATION
-    %rotation
-    test = imresize(imrotate(Is1(:,:,k), p1(k,5)*(-57.2957795)), [100 100]);
-%     imshow(test);
-%     imwrite(test, ['TEST_aligned/',int2str(k+53),'.png'])
-    folderName = map{index};
-    folderName = folderName(1:3);
-    if ~exist(['TEST_aligned/',folderName], 'dir')
-        % Folder does not exist so create it.
-        mkdir(['TEST_aligned/',folderName]);
-    end
-    imwrite(test, ['TEST_aligned/',map{index}])
+% get absolute positions of elipses
+bbs=poseGt('getBbs', model,p1,1);
+p1_1 = p1;
+p1 = bbs;
+for k = 2:size(Is1,4)
+    % angle of ear
+    theta = (p1_1(k,5)*(-180)/pi);
+
+    %rotate & scale image
+        earIm = Is1(:,:,:,k);
+%     earIm = imrotate(Is1(:,:,:,k), theta);
+%     earIm = imresize(earIm, [100 100]);
+
+%     rotation_matrix = [cos(theta) -sin(theta); sin(theta) cos(theta)];
+    
+    figure(6); imshow(earIm); hold on;
+    % plot center of rotated elipse
+    [h, hc, hl] = plotEllipse(p1(k,1),p1(k,2),p1(k,3),p1(k,4),p1(k,5));
+    plot(hl.XData(1),hl.YData(1),'g.','MarkerSize',25);
+    plot(hl.XData(2),hl.YData(2),'r.','MarkerSize',25);
+    
+    earIm = rotateAround(earIm, hc.XData(1), hc.YData(1), theta);
+    imshow(earIm); hold on;
+%     define ROI mask
+    [h, hc, hl] = plotEllipse(p1(k,1),p1(k,2),p1(k,3),p1(k,4),-pi/2);
+    mask = roipoly(earIm,h.XData, h.YData);
+    imshow(earIm.*uint8(mask));
+%     plotEllipse(p1(k,1),p1(k,2),p1(k,3),p1(k,4),-pi/2);
+
+%     plot(p1(k,1),p1(k,2),'y.','MarkerSize',25);
+%     plot(p1(k,1),p1(k,4),'r.','MarkerSize',20);
+
+    % save alligned image
+%     result_dir = 'TEST_aligned/';
+%     imwrite(test, [result_dir,int2str(k+53),'.png'])
+%     folderName = map{index};
+%     folderName = folderName(1:3);
+%     if ~exist([result_dir,folderName], 'dir')
+%         % Folder does not exist so create it.
+%         mkdir([result_dir,folderName]);
+%     end
+%     imwrite(test, [result_dir,map{index}])
     index = index + 1;
 end
-
-
-
-% figure(5); poseGt('drawRes',model,Is1,p1,pa1(:,:,end),'nCol',10);
-% figure(6); poseGt('drawRes',model,Is0,p0,pa0(:,:,end),'nCol',10);
-if(0), savefig([name '-examples'],'jpeg'); end
-
 %% test cprApply with clustering
 % RandStream.getGlobalStream.reset();
 % n2=min(128,n1); Is2=Is1(:,:,:,1:n2); p2=p1(1:n2,:);

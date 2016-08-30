@@ -227,8 +227,12 @@ if( isfield(model,'isFishPose') && model.isFishPose );
   hold off; h=h(:); set(h,'LineWidth',lw,'Color',cs(1,:)); return
 end
 % plot ellipses
-for i=1:n, for j=1:m, b=bbs(i,j,:); [h(i,j,1),h(i,j,2),h(i,j,3)] = ...
-      plotEllipse(b(1),b(2),b(3),b(4),b(5),cs(j,:)); end; end
+for i=1:n
+    for j=1:m
+        b=bbs(i,j,:); 
+        [h(i,j,1),h(i,j,2),h(i,j,3)] = plotEllipse(b(1),b(2),b(3),b(4),b(5),cs(j,:)); 
+    end; 
+end
 set(h,'LineWidth',lw); hold off; h=h(:);
 end
 
@@ -236,27 +240,43 @@ function [h,Vs] = drawRes( model, Is, phisGt, phis, varargin )
     % Draw results overlaid on ground truth, separated into quantiles.
     dfs={ 'quantile',5, 'nCol',6, 'lw',1, 'clrTr',0, 'ignGt',0, 'drawIs',1 };
     [qnt,nCol,lw,clrTr,ignGt,drawIs]=getPrmDflt(varargin,dfs,1);
-    if(isempty(phisGt)), phisGt=phis(:,:,1); end
-    n=size(phis,1); T=size(phis,3); assert(size(phisGt,1)==n);
+    if(isempty(phisGt))
+        phisGt=phis(:,:,1); 
+    end
+    n=size(phis,1); 
+    T=size(phis,3); 
+    assert(size(phisGt,1)==n);
     % sort by quality of results
-    ds=dist(model,phis,phisGt); [ds,ord]=sort(ds(:,1,end));
-    phisGt=phisGt(ord,:); phis=phis(ord,:,:);
+    ds=dist(model,phis,phisGt); 
+    [ds,ord]=sort(ds(:,1,end));
+    phisGt=phisGt(ord,:); 
+    phis=phis(ord,:,:);
     % divide into quantiles
-    if(ndims(Is)==2), nShow=n; is=1:n; else Is=Is(:,:,ord);
-      if(length(qnt)==1), qnt=round(linspace(0,n,qnt+1)); end
-      q=length(qnt)-1; nCol=min(nCol,n); is=zeros(nCol,q); nShow=[q nCol];
-      for i=1:q, is(:,i)=sort(randSample(qnt(i)+1:qnt(i+1),nCol,1)); end
+    if(ndims(Is)==2)
+        nShow=n; 
+        is=1:n; 
+    else
+        Is=Is(:,:,ord);
+        if(length(qnt)==1)
+            qnt=round(linspace(0,n,qnt+1)); 
+        end
+        q=length(qnt)-1; 
+        nCol=min(nCol,n); 
+        is=zeros(nCol,q); 
+        nShow=[q nCol];
+        for i=1:q
+            is(:,i)=sort(randSample(qnt(i)+1:qnt(i+1),nCol,1)); 
+        end
     end
     
     % draw ground truth and results
-    if(clrTr), clrs=hsv(round(T*6)); clrs=clrs(round(T*.8):end,:);
-    else clrs=repmat([0 1 0],[T 1]); end;
+    if(clrTr)
+        clrs=hsv(round(T*6)); 
+        clrs=clrs(round(T*.8):end,:);
+    else
+        clrs=repmat([0 1 0],[T 1]); 
+    end;
     
-    %TODO rotation (57.2957795)    
-%     Is = uint8(Is);
-%     for k = 1:size(Is,3)
-%         Is(:,:,k) = imresize(imrotate(Is(:,:,k), phisGt(k,5)*(-57.2957795)), [100 100]);
-%     end
     
     h1=draw(model,Is,phisGt,'clrs',[0 .8 .8],'n',nShow,'is',is,'lw',lw,...
       'drawIs',drawIs); if(ignGt), delete(h1); h1=[]; end
