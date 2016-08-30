@@ -116,15 +116,35 @@ for k = 2:size(Is1,4)
     plot(hl.XData(1),hl.YData(1),'g.','MarkerSize',25);
     plot(hl.XData(2),hl.YData(2),'r.','MarkerSize',25);
     
+    
     earIm = rotateAround(earIm, hc.XData(1), hc.YData(1), theta);
-    imshow(earIm); hold on;
-%     define ROI mask
+    imshow(earIm); hold on; axis on;
+    % define ROI mask
+    % need to plot elipse again to gain new coordiantes of aligned ellipse
     [h, hc, hl] = plotEllipse(p1(k,1),p1(k,2),p1(k,3),p1(k,4),-pi/2);
     mask = roipoly(earIm,h.XData, h.YData);
-    imshow(earIm.*uint8(mask));
-%     plotEllipse(p1(k,1),p1(k,2),p1(k,3),p1(k,4),-pi/2);
-
-%     plot(p1(k,1),p1(k,2),'y.','MarkerSize',25);
+    masked_image = earIm.*uint8(mask);
+    
+   
+    % calculate min distance from center to elipse - this is smaller axis
+    center = [hc.XData(1), hc.YData(1)];
+    min = 999999; % yeah yeah bad practice...
+    for l = 1:size(h.XData,2)
+        distance = sqrt((h.XData(l)-center(1))^2 + (h.YData(l)-center(2))^2);
+        if(distance < min )
+            min = distance;
+        end
+    end
+%     disp(min);
+%     plot(center(1)-min,center(2),'y.','MarkerSize',25);
+%     plot(center(1)+min,center(2),'r.','MarkerSize',25);
+    
+    %TODO major axis length
+    major_axis_len = sqrt((hl.XData(2)-center(1))^2 + (h.YData(2)-center(2))^2);
+    %TODO crop rectangle [xmin ymin width height]
+    crop_rect = imcrop(earIm, [center(1)-min hl.YData(2) min*2 major_axis_len*2]);
+    figure(7); imshow(crop_rect);
+    
 %     plot(p1(k,1),p1(k,4),'r.','MarkerSize',20);
 
     % save alligned image
