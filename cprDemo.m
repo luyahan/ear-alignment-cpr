@@ -94,71 +94,143 @@ Is0 = uint8(Is0);
 %     index = index + 1;
 % end
 
-Is1 = uint8(Is1);
-% get absolute positions of elipses
-bbs=poseGt('getBbs', model,p1,1);
-p1_1 = p1;
-p1 = bbs;
-for k = 2:size(Is1,4)
-    % angle of ear
-    theta = (p1_1(k,5)*(-180)/pi);
-
-    %rotate & scale image
-        earIm = Is1(:,:,:,k);
-%     earIm = imrotate(Is1(:,:,:,k), theta);
+%%
+% Is0 = uint8(Is0);
+% % get absolute positions of elipses
+% bbs=poseGt('getBbs', model,p0,1);
+% 
+% p0 = bbs;
+% for k = 2:size(Is0,4)
+%     % angle of ear
+%     theta = (p0(k,5)*(-180)/pi);
+% 
+%     %rotate & scale image
+%         earIm = Is0(:,:,:,k);
+% %     earIm = imrotate(Is0(:,:,:,k), theta);
 %     earIm = imresize(earIm, [100 100]);
-
-%     rotation_matrix = [cos(theta) -sin(theta); sin(theta) cos(theta)];
-    
-    figure(6); imshow(earIm); hold on;
-    % plot center of rotated elipse
-    [h, hc, hl] = plotEllipse(p1(k,1),p1(k,2),p1(k,3),p1(k,4),p1(k,5));
-    plot(hl.XData(1),hl.YData(1),'g.','MarkerSize',25);
-    plot(hl.XData(2),hl.YData(2),'r.','MarkerSize',25);
-    
-    
-    earIm = rotateAround(earIm, hc.XData(1), hc.YData(1), theta);
-    imshow(earIm); hold on; axis on;
-    % define ROI mask
-    % need to plot elipse again to gain new coordiantes of aligned ellipse
-    [h, hc, hl] = plotEllipse(p1(k,1),p1(k,2),p1(k,3),p1(k,4),-pi/2);
-    mask = roipoly(earIm,h.XData, h.YData);
-    masked_image = earIm.*uint8(mask);
-    
-   
-    % calculate min distance from center to elipse - this is smaller axis
-    center = [hc.XData(1), hc.YData(1)];
-    min = 999999; % yeah yeah bad practice...
-    for l = 1:size(h.XData,2)
-        distance = sqrt((h.XData(l)-center(1))^2 + (h.YData(l)-center(2))^2);
-        if(distance < min )
-            min = distance;
-        end
-    end
-%     disp(min);
-%     plot(center(1)-min,center(2),'y.','MarkerSize',25);
-%     plot(center(1)+min,center(2),'r.','MarkerSize',25);
-    
-    %TODO major axis length
-    major_axis_len = sqrt((hl.XData(2)-center(1))^2 + (h.YData(2)-center(2))^2);
-    %TODO crop rectangle [xmin ymin width height]
-    crop_rect = imcrop(earIm, [center(1)-min hl.YData(2) min*2 major_axis_len*2]);
-    figure(7); imshow(crop_rect);
-    
-%     plot(p1(k,1),p1(k,4),'r.','MarkerSize',20);
-
-    % save alligned image
-%     result_dir = 'TEST_aligned/';
-%     imwrite(test, [result_dir,int2str(k+53),'.png'])
+% 
+% %     rotation_matrix = [cos(theta) -sin(theta); sin(theta) cos(theta)];
+%     
+%     figure(6); imshow(earIm); hold on;
+%     % plot center of rotated elipse
+%     [h, hc, hl] = plotEllipse(p0(k,1),p0(k,2),p0(k,3),p0(k,4),p0(k,5));
+%     plot(hl.XData(1),hl.YData(1),'g.','MarkerSize',25);
+%     plot(hl.XData(2),hl.YData(2),'r.','MarkerSize',25);
+%     
+%     earIm = rotateAround(earIm, hc.XData(1), hc.YData(1), theta);
+%     imshow(earIm); hold on; axis on;
+%     % define ROI mask
+%     % need to plot elipse again to gain new coordiantes of aligned ellipse
+%     [h, hc, hl] = plotEllipse(p0(k,1),p0(k,2),p0(k,3),p0(k,4),-pi/2);
+%     mask = roipoly(earIm,h.XData, h.YData);
+%     masked_image = earIm.*uint8(mask);
+%     
+%    
+%     % calculate min distance from center to elipse - this is smaller axis
+%     center = [hc.XData(1), hc.YData(1)];
+%     min = sqrt((h.XData(1)-center(1))^2 + (h.YData(1)-center(2))^2);
+%     for l = 1:size(h.XData,2)
+%         distance = sqrt((h.XData(l)-center(1))^2 + (h.YData(l)-center(2))^2);
+%         if(distance < min )
+%             min = distance;
+%         end
+%     end
+% %     disp(min);
+% %     plot(center(1)-min,center(2),'y.','MarkerSize',25);
+% %     plot(center(1)+min,center(2),'r.','MarkerSize',25);
+%     
+%     %TODO major axis length
+%     major_axis_len = sqrt((hl.XData(2)-center(1))^2 + (h.YData(2)-center(2))^2);
+%     %TODO crop rectangle [xmin ymin width height]
+%     crop_rect = imcrop(earIm, [center(1)-min hl.YData(2) min*2 major_axis_len*2]);
+%     figure(7); imshow(crop_rect);
+%     disp(major_axis_len);
+% %     plot(p1(k,1),p1(k,4),'r.','MarkerSize',20);
+% 
+%     % save alligned image
+%     result_dir = 'CROPED_ENCLOSING_RECTANGLE_1_9/';
+% %     imwrite(crop_rect, [result_dir,int2str(k+53),'.png'])
 %     folderName = map{index};
 %     folderName = folderName(1:3);
 %     if ~exist([result_dir,folderName], 'dir')
 %         % Folder does not exist so create it.
 %         mkdir([result_dir,folderName]);
 %     end
-%     imwrite(test, [result_dir,map{index}])
-    index = index + 1;
+%     imwrite(crop_rect, [result_dir,map{index}])
+%     index = index + 1;
+%  
+% end
+
+%%
+Is1 = uint8(Is1);
+% get absolute positions of elipses
+bbs=poseGt('getBbs', model,p1,1);
+p1_1 = p1;
+p1 = bbs;
+for k = 1:size(Is1,4)
+    % angle of ear (transformed to degrees)
+    theta = (p1_1(k,5)*(-180)/pi);
+
+    % add padding to the image (padding is equal to diagonal of
+    % (SQUARED!)image/2 on all sides
+    earIm = Is1(:,:,:,k);
+    sizeOfIm = size(earIm,1);
+    padding = round((sqrt(2*sizeOfIm*sizeOfIm)-sizeOfIm)/2);
+    earIm = padarray(earIm, [padding, padding]);
+    
+    subplot(1,5,1); imshow(earIm); hold on; axis on;
+    % plot center of rotated elipse
+    [h, hc, hl] = plotEllipse(p1(k,1)+padding,p1(k,2)+padding,p1(k,3),p1(k,4),p1(k,5));
+%     plot(hl.XData(1),hl.YData(1),'g.','MarkerSize',25);
+%     plot(hl.XData(2),hl.YData(2),'r.','MarkerSize',25);
+    
+    % rotate ear around center of the elipse
+    earIm = rotateAround(earIm, hc.XData(1), hc.YData(1), theta);
+    subplot(1,5,2);imshow(earIm); hold on; axis on;
+    % define ROI mask
+    % need to plot elipse again to gain new coordiantes of aligned ellipse
+    [h, hc, hl] = plotEllipse(p1(k,1)+padding,p1(k,2)+padding,p1(k,3),p1(k,4),-pi/2);
+    %make a mask based on ellipse
+    mask = roipoly(earIm,h.XData, h.YData);
+    %apply mask
+    masked_image = earIm.*uint8(mask);
+    
+   
+    % calculate min distance from center to elipse - this is smaller axis
+    center = [hc.XData(1), hc.YData(1)];
+    min = sqrt((h.XData(1)-center(1))^2 + (h.YData(1)-center(2))^2);
+    for l = 1:size(h.XData,2)
+        distance = sqrt((h.XData(l)-center(1))^2 + (h.YData(l)-center(2))^2);
+        if(distance < min )
+            min = distance;
+        end
+    end
+
+    %major axis length
+    major_axis_len = sqrt((hl.XData(2)-center(1))^2 + (h.YData(2)-center(2))^2);
+    
+    %crop rectangle [xmin ymin width height]
+    crop_rect = imcrop(earIm, [center(1)-min hl.YData(2) min*2 major_axis_len*2]);
+    crop_rect_bounding = imcrop(masked_image, [center(1)-min hl.YData(2) min*2 major_axis_len*2]);
+    
+    %show croped rectangle
+    subplot(1,5,3);imshow(crop_rect); axis on;
+    subplot(1,5,4);imshow(masked_image); axis on;
+    subplot(1,5,5);imshow(crop_rect_bounding); axis on;
+
+    % save alligned image to restult_dir
+    result_dir = 'CROPED_ENCLOSING_RECTANGLE_6_9/';
+    folderName = map{index};
+    folderName = folderName(1:3);
+    %check if folder exists
+    if ~exist([result_dir,folderName], 'dir')
+        % Folder does not exist so create it.
+        mkdir([result_dir,folderName]);
+    end
+    imwrite(crop_rect_bounding, [result_dir,map{index}])
+    index = index + 1; 
 end
+
 %% test cprApply with clustering
 % RandStream.getGlobalStream.reset();
 % n2=min(128,n1); Is2=Is1(:,:,:,1:n2); p2=p1(1:n2,:);
