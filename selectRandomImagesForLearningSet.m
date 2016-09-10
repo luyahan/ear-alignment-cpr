@@ -1,9 +1,10 @@
 function selectRandomImagesForLearningSet(dirName, trainDir, testDir)
 %% select random images from directory (database) and creating learning(random) dataset
-% dirName: path of directory
-% trainDir: dir where train images index.png images are stored from 1 to n 
+% dirName: path of database
+% trainDir: dir where train images are stored from 1 to n 
 % testDir: images which are not in trainDir
-% sample : selectRandomImagesForLearningSet('piotr-cpr/databases/ustb2', 'ucnaUstbTEST/', 'testnaUstbTEST/');
+
+% usage : selectRandomImagesForLearningSet('piotr-cpr/databases/ustb2', 'ucnaUstbTEST/', 'testnaUstbTEST/');
 
 if ~exist(testDir, 'dir')
     % Folder does not exist so create it.
@@ -40,6 +41,7 @@ end
     randomArray = sort(randomArray);
 %     arrayOfNames = zeros(1, size(randomArray,2));
     result = zeros(100,100,size(randomArray, 2));
+    result = uint8(result);
     index = 1;
     randomIndex = 1;
     dataIndex = 1;
@@ -54,8 +56,8 @@ end
             inside_dir_size = length(inside_dir_content);
             % read content of the dir
             for j = 1:inside_dir_size
-%               % if index is equal as index at randomIndex position in
-%               randomArray -> save this image
+                % if index is equal as index at randomIndex position in
+                % randomArray -> save this image to testSet
                 if(index == randomArray(randomIndex) && randomIndex < size(randomArray, 2))
                     file_name = [inside_dir_name,inside_dir_content(j).name];
                     % save name to file
@@ -102,4 +104,4 @@ end
             end
         end
     end
-    save('testnaMnozica.mat', 'result');
+    save('testnaMnozica10_9.mat', 'result');
