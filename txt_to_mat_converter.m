@@ -1,6 +1,6 @@
 %% convert from.txt annotations to .mat file reqired for cprDEMO
 
-dir_name = 'ucnaUstb8_9_annotations/';
+dir_name = 'delhi_ucna12_9_annotations/';
 fnames = dir([dir_name, '*.txt']);
 numfids = length(fnames);
 % numfids = numfids - 2;
@@ -16,4 +16,4 @@ for i = 1:numfids
   end
   fclose('all');
 end
-save('ucnaUstb8_9_annotations.mat', 'result')
+save('delhiUcna12_9_annotations.mat', 'result')

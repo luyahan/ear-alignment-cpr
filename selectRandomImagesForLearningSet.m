@@ -28,7 +28,7 @@ end
             file_name_index = size(dirContntent(i).name,2);
             file_name = dirContntent(i).name(1:file_name_index);
             inside_dir_name = [dir_name,'/',file_name,'/'];
-            inside_dir_content = dir([inside_dir_name, '*.BMP']);
+            inside_dir_content = dir([inside_dir_name, '*.bmp']);
             inside_dir_size = length(inside_dir_content);
             numberOfFiles = numberOfFiles + inside_dir_size;
         end
@@ -51,8 +51,9 @@ end
             % set name of dir
             file_name_index = size(dirContntent(i).name,2);
             file_name = dirContntent(i).name(1:file_name_index);
+            dirNumber = file_name;
             inside_dir_name = [dir_name,'/',file_name,'/'];
-            inside_dir_content = dir([inside_dir_name, '*.BMP']);
+            inside_dir_content = dir([inside_dir_name, '*.bmp']);
             inside_dir_size = length(inside_dir_content);
             % read content of the dir
             for j = 1:inside_dir_size
@@ -61,7 +62,13 @@ end
                 if(index == randomArray(randomIndex) && randomIndex < size(randomArray, 2))
                     file_name = [inside_dir_name,inside_dir_content(j).name];
                     % save name to file
-                    arrayOfNames{randomIndex} = {file_name};
+                    %TODO: ONLY USTB
+%                     if(str2num(dirNumber) < 10)
+%                         tmpIndex = 9;
+%                     else
+%                         tmpIndex = 10;
+%                     end
+%                     map{randomIndex,1} = {file_name(end-tmpIndex:end)};
                     
                     
                     % create resultDir if does not exist
@@ -75,6 +82,7 @@ end
                         I = rgb2gray(I);
                     end
                     I = imresize(I, [100 100]);
+                    I = histeq(I);
                     imwrite(I, [trainDir,int2str(dataIndex), '.jpg']);
                     % save it to .mat
                     dataIndex = dataIndex + 1;
@@ -82,6 +90,7 @@ end
                 % save to testdIR
                 else
                     file_name = [inside_dir_name,inside_dir_content(j).name];
+                    map{testIndex,1} = {file_name(33:end)};
                     I = imread(file_name);
                     if(size(I, 3) == 3 )
                         I = rgb2gray(I);
@@ -95,6 +104,7 @@ end
                         mkdir([testDir,folder]);
                     end
                     %TODO SAVE TO .MAT
+                    I = histeq(I);
                     imwrite(I, [testDir, save_path]);
                     result(:,:,testIndex) = I;
                     testIndex = testIndex + 1;
@@ -104,4 +114,6 @@ end
             end
         end
     end
-    save('testnaMnozica10_9.mat', 'result');
+    save('delhi_testnaMnozica12_9.mat', 'result');
+    save('delhi_testnaMnozica12_9_MAP.mat', 'map');
+    save('delhi_randomArray_12_9.mat', 'randomArray');
