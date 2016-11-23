@@ -1,0 +1,2 @@
+poseLabeler(model,'piotr-cpr/set254_orig/','testTest/')
+poseLabeler(model,'ucnaUstb8_9/','ucnaUstb8_9_annotations/')
