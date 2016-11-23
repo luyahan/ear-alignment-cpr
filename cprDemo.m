@@ -1,24 +1,24 @@
 %% Demo demonstrating CPR code using toy data.
 
 %% generate toy training and testing data
-RandStream.getGlobalStream.reset(); n0=81; n1=82; n2=0;
+RandStream.getGlobalStream.reset(); n0=59; n1=59; n2=0;
 model=poseGt('createModel','ellipse'); d=100;
 model.parts(1).sigs(1:3)=[10 10 pi];
 % [Is,p] = poseGt('toyData',model,n0+n1+n2,d,d,'noise',.2);
 % Load ears
 % data = load('ucnaUstb10_9_images.mat');
 % data = load('delhiUcna12_9_images.mat');
-data = load('delhi_testnaMnozica12_9.mat');
+data = load('awe_testnaMnozica19_9.mat');
 Is = data.result;
 % Load annotations
 
-annotation = load('delhiUcna12_9_annotations.mat');
+annotation = load('awe_ucna19_9_annotations.mat');
 p = annotation.result;
 figure(1); poseGt('draw',model,Is,p);
-save('ustb912-data','Is','model','p','n0','n1','n2');
+save('awe19_9-data','Is','model','p','n0','n1','n2');
 
 %% load data and split into training and testing data
-name='ustb912'; d=load([name '-data']); name=[name '00'];
+name='awe19_9'; d=load([name '-data']); name=[name '00'];
 Is=d.Is; 
 model=d.model; 
 p=d.p; 
@@ -79,7 +79,7 @@ end
 
 if(1)
     %% align first set
-    map = load('delhi_testnaMnozica12_9_MAP.mat');
+    map = load('awe_testnaMnozica19_9_MAP.mat');
     map = map.map;
     index=1;
     Is0 = uint8(Is);
@@ -158,7 +158,7 @@ if(1)
                 subplot(1,5,5);imshow(crop_rect_bounding); axis on;
 
                 % save alligned image to restult_dir
-                result_dir = 'DELHI_CROPED_ENCLOSING_RECTANGLE_19_9_NOMASK/';
+                result_dir = 'AWE_CROPED_ENCLOSING_RECTANGLE_19_9_NOMASK/';
                 slashIndex = strfind(map{index}, '/');
                 slashIndex = slashIndex{1};
                 folderName = map{index};
@@ -170,7 +170,7 @@ if(1)
                     mkdir([result_dir,folderName]);
                 end
 %                 imwrite(crop_rect_bounding, [result_dir,cell2mat(map{index})])
-                imwrite(crop_rect, [result_dir,cell2mat(map{index})])
+                imwrite(crop_rect_bounding, [result_dir,cell2mat(map{index})])
                 index = index + 1; 
             end
 %         else

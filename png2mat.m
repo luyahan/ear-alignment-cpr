@@ -1,8 +1,8 @@
 %% Reads images and saves them to .mat format
 
-dir_name = 'delhi_ucna12_9/';
+dir_name = 'awe_ucna19_9/';
 % dir_name = 'piotr-cpr/set105_orig/';
-fnames = dir([dir_name, '*.jpg']);
+fnames = dir([dir_name, '*.png']);
 numfids = length(fnames);
 % numfids = numfids - 2;
 % image_dir = 'piotr-cpr/set358_orig/';
@@ -20,4 +20,4 @@ for i = 1:numfids
   result(:,:,i) = Im;
   fclose('all');
 end
-save('delhiUcna12_9_images.mat', 'result')
+save('awe_ucna19_9_images.mat', 'result')

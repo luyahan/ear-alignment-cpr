@@ -13,7 +13,7 @@ function getOriginalDatabaseFromAllignedDb(dbPath, orgPath, resPath)
             result_dir_name = [res_dir_name,'/',file_name,'/'];
             original_dir_name = [org_dir_name,'/',file_name,'/'];
             
-            inside_dir_content = dir([inside_dir_name, '*.bmp']);
+            inside_dir_content = dir([inside_dir_name, '*.png']);
             inside_dir_size = length(inside_dir_content);
             for j = 1:inside_dir_size
                 if ~exist(result_dir_name, 'dir')
