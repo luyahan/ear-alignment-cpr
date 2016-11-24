@@ -6,7 +6,7 @@ This library is fork of [Piotrs Dollar](https://github.com/pdollar/) Cadcaded Po
 ### Requirements
 Library requires Matlab Image Processing Toolbox and [Piotr's Matlab Toolbox](http://pdollar.github.io/toolbox/) (version 3.00 or later). The code was tested on Matlab R2015b.
 
-### Getting Started _(from original CPR library)_
+### **TODO:** Getting Started _(from original CPR library)_
 
 The code is quite compact, as is the method. Start with cprDemo.m which first generates toy data, then trains a CPR model, 
 and finally displays the error and example results. The demo should take under 5 minutes to run, including training time. 
