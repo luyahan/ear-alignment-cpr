@@ -3,6 +3,9 @@
 ### Description
 This library is fork of [Piotrs Dollar](https://github.com/pdollar/) Cascaded Pose Regression library([download link](http://pdollar.github.io/files/code/cpr/cprV1.00.zip)). Library successfully determines orientation and position of predefined model on picture from trained regression. Based on model position and orientation algorithm then align ear in its natural position. This library and research was part of my bachelor degree and it is available [here](http://eprints.fri.uni-lj.si/3674/1/63110173-METOD_RIBI%C4%8C-Vpliv_poravnave_na_uspe%C5%A1nost_razpoznavanja_uhljev-1.pdf) (in Slovene)
 
+![Alignment process image](https://github.com/metodribic/ear-alignment-cpr/blob/master/flow.png "Alignment process, from annotations to alignment, cropping and masking")
+Image shows process from annotating ear to alignment, cropping and masking.
+
 This library and research was part of my bachelor thesis and it is available [here](http://eprints.fri.uni-lj.si/3674/1/63110173-METOD_RIBI%C4%8C-Vpliv_poravnave_na_uspe%C5%A1nost_razpoznavanja_uhljev-1.pdf) (in Slovene)
 
 ### Requirements
@@ -20,11 +23,11 @@ Library requires Matlab Image Processing Toolbox and [Piotr's Matlab Toolbox](ht
   	% number of all input images !!!min. is 100!!!
   	d = 100 
 
-  	% train images, should contain result atribute which stores images
+  	% train images, should contain result attribute which stores images
   	data = load('trainImages.mat'); 
 
   	% train annotations from poseLabeler.m, should contain result atribute which stores annotations
-  	$ primarly annotations from poseLabeler are in .txt files, you should use txt_to_mat_converter.m to convert .txt files into one .mat file
+  	$ primarily annotations from poseLabeler are in .txt files, you should use txt_to_mat_converter.m to convert .txt files into one .mat file
   	annotation = load('trainImages_annotations.mat');
 
   	% train or load/apply regressor
