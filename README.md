@@ -1,7 +1,9 @@
 # Ear alignment using Cascaded Pose Regression
 
 ### Description
-This library is fork of [Piotrs Dollar](https://github.com/pdollar/) Cadcaded Pose Regression library([download link](http://pdollar.github.io/files/code/cpr/cprV1.00.zip)). Library successfully determines orientation and position of predefined model on picture from trained regresson. Based on model position and orientation algorithem then align ear in its natural position. This library and research was part of my bachelor degree and it is avaliable [here](http://eprints.fri.uni-lj.si/3674/1/63110173-METOD_RIBI%C4%8C-Vpliv_poravnave_na_uspe%C5%A1nost_razpoznavanja_uhljev-1.pdf) (in Slovene)
+This library is fork of [Piotrs Dollar](https://github.com/pdollar/) Cadcaded Pose Regression library([download link](http://pdollar.github.io/files/code/cpr/cprV1.00.zip)). Library successfully determines orientation and position of predefined model on picture from trained regresson. Based on model position and orientation algorithem then align ear in its natural position. 
+
+This library and research was part of my bachelor thesis and it is avaliable [here](http://eprints.fri.uni-lj.si/3674/1/63110173-METOD_RIBI%C4%8C-Vpliv_poravnave_na_uspe%C5%A1nost_razpoznavanja_uhljev-1.pdf) (in Slovene)
 
 ### Requirements
 Library requires Matlab Image Processing Toolbox and [Piotr's Matlab Toolbox](http://pdollar.github.io/toolbox/) (version 3.00 or later). The code was tested on Matlab R2015b.
