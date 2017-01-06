@@ -1,7 +1,9 @@
 # Ear alignment using Cascaded Pose Regression
 
 ### Description
-This library is fork of [Piotrs Dollar](https://github.com/pdollar/) Cadcaded Pose Regression library([download link](http://pdollar.github.io/files/code/cpr/cprV1.00.zip)). Library successfully determines orientation and position of predefined model on picture from trained regresson. Based on model position and orientation algorithem then align ear in its natural position. This library and research was part of my bachelor degree and it is avaliable [here](http://eprints.fri.uni-lj.si/3674/1/63110173-METOD_RIBI%C4%8C-Vpliv_poravnave_na_uspe%C5%A1nost_razpoznavanja_uhljev-1.pdf) (in Slovene)
+This library is fork of [Piotrs Dollar](https://github.com/pdollar/) Cascaded Pose Regression library([download link](http://pdollar.github.io/files/code/cpr/cprV1.00.zip)). Library successfully determines orientation and position of predefined model on picture from trained regression. Based on model position and orientation algorithm then align ear in its natural position. This library and research was part of my bachelor degree and it is available [here](http://eprints.fri.uni-lj.si/3674/1/63110173-METOD_RIBI%C4%8C-Vpliv_poravnave_na_uspe%C5%A1nost_razpoznavanja_uhljev-1.pdf) (in Slovene)
+
+This library and research was part of my bachelor thesis and it is available [here](http://eprints.fri.uni-lj.si/3674/1/63110173-METOD_RIBI%C4%8C-Vpliv_poravnave_na_uspe%C5%A1nost_razpoznavanja_uhljev-1.pdf) (in Slovene)
 
 ### Requirements
 Library requires Matlab Image Processing Toolbox and [Piotr's Matlab Toolbox](http://pdollar.github.io/toolbox/) (version 3.00 or later). The code was tested on Matlab R2015b.
@@ -34,10 +36,10 @@ Library requires Matlab Image Processing Toolbox and [Piotr's Matlab Toolbox](ht
 	end
    ```
 
-  **NOTE:** All code inside alignment block should be customized based on your needs. For my resarch was crutial to have unaligned set and therefore I needed map matrix to know how to save images.
+  **NOTE:** All code inside alignment block should be customized based on your needs. For my research was crucial to have unaligned set and therefore I needed map matrix to know how to save images.
 
-- Images are aligned based on enclosing ractangle of ellipse get from cpr algorithm.
-- If you want to define new model update poseGt.m (this script is original from cpr library and was not chaneg for this research)
+- Images are aligned based on enclosing rectangle of ellipse get from CPR algorithm.
+- If you want to define new model update poseGt.m (this script is original from CPR library and was not change for this research)
   
 ### Resources
 1. Piotr Dollár, Peter Welinder, and Pietro Perona. [Cascaded pose regression](http://web.bii.a-star.edu.sg/~zhangxw/files/Cascaded%20pose%20regression.pdf). In Computer Vision and Pattern Recognition (CVPR), IEEE Conference on, pages 1078{1085, 2010.
