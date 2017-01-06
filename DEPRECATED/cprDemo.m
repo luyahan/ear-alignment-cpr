@@ -6,15 +6,14 @@ model=poseGt('createModel','ellipse'); d=100;
 model.parts(1).sigs(1:3)=[10 10 pi];
 % [Is,p] = poseGt('toyData',model,n0+n1+n2,d,d,'noise',.2);
 % Load ears
-% data = load('ucnaUstb10_9_images.mat');
-% data = load('delhiUcna12_9_images.mat');
-data = load('awe_testnaMnozica19_9.mat');
+% data = load('awe_testnaMnozica19_9.mat');
+data = load('faces_images.mat');
 Is = data.result;
 % Load annotations
 
 annotation = load('awe_ucna19_9_annotations.mat');
 p = annotation.result;
-figure(1); poseGt('draw',model,Is,p);
+% figure(1); poseGt('draw',model,Is,p);
 save('awe19_9-data','Is','model','p','n0','n1','n2');
 
 %% load data and split into training and testing data
